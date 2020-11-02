@@ -1,14 +1,15 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 //using System.Math;
-public class MM1 : MonoBehaviour
+public class MMS : MonoBehaviour
 {
     // Start is called before the first frame update
 
     public InputField LambdaInput;
     public InputField MiuInput;
+    public InputField SInput;
     public Text L_Result;
     public Text LQ_Result;
     public Text T_Result;
@@ -29,37 +30,65 @@ public class MM1 : MonoBehaviour
     // public GameObject Content;
     // public GameObject Errortext;
 
-    public void generarNumeros(){
+    public void generarNumeros()
+    {
         // resetTable();
         //Recibir los input
         double lambda = double.Parse(LambdaInput.text);
         double miu = double.Parse(MiuInput.text);
+        double s = double.Parse(SInput.text);
 
-        if(miu < lambda)
-        {
-            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Pon los input bien";
+        /*    if (miu < lambda)
+            {
+                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Pon los input bien";
 
-        }
-        else
-        {
-            double p = lambda / miu;
+            }
+            else
+            {
+                float fac = factorial(0f);
+                print("factorial 0 " + fac);
 
-            print(p.ToString("0.00"));
-            generarLQ(lambda, miu);
-            generarL(lambda, miu);
-            generarWQ(lambda, miu);
-            generarW(lambda, miu);
-            PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.00");
+                float fac1 = factorial(1f);
+                print("factorial 1 " + fac1);
 
-        }
+                double p0 = generarP0(lambda, miu, s);
+
+                print("P0 " + p0);          
+                double lq = generarLQ(lambda, miu);
+                LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.00");
+                generarL(lambda, miu);
+                generarWQ(lambda, miu);
+                generarW(lambda, miu);
+                double p =  generarP(lambda, miu, s);
+                PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.00");
+
+
+            }*/
+
+
+        float fac = factorial(0f);
+        print("factorial 0 " + fac);
+
+        float fac1 = factorial(1f);
+        print("factorial 1 " + fac1);
+
+        double p0 = generarP0(lambda, miu, s);
+
+        print("P0 " + p0);
+        double lq = generarLQ(lambda, miu);
+        LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.00");
+        generarL(lambda, miu);
+        generarWQ(lambda, miu);
+        generarW(lambda, miu);
+        double p = generarP(lambda, miu, s);
+        PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.00");
 
 
 
-      
 
     }
 
-    public void generarLQ(double lambda, double miu)
+    public double generarLQ(double lambda, double miu)
     {
         // resetTable();
         //Recibir los input
@@ -69,8 +98,70 @@ public class MM1 : MonoBehaviour
         result = (lambda * lambda) / (miu * (miu - lambda));
 
 
-        
-        LQ_Result.GetComponent<UnityEngine.UI.Text>().text = result.ToString("0.00") ;
+
+       
+        return result;
+
+    }
+
+    public double generarP0(double l, double m, double s1)
+    {
+        // resetTable();
+        //Recibir los input
+
+        float result = 0f;
+        float sum = 1f;
+
+
+        float lambda = (float)(l);
+        float miu = (float)(m);
+        float s = (float)(s1);
+
+       for (float n = 0; n< s; n++)
+        {
+            sum = (Mathf.Pow(lambda / miu, n) / factorial(n) ) + (Mathf.Pow(lambda/miu , s) / factorial(s)) * (1/ (1-(lambda/(s*miu)))) ;
+        }
+
+        result = 1 / sum;
+
+        print("P0"+ result);
+
+
+
+
+        return result;
+
+    }
+    public float factorial(float n)
+    {
+    // resetTable();
+    //Recibir los input
+
+
+    float sum = 1f;
+
+       for(float i = 1f; i <= n; i++)
+    {
+        sum = sum * i;
+    }
+
+    return sum;
+  
+    }
+    public double generarP(double lambda, double miu, double s)
+    {
+        // resetTable();
+        //Recibir los input
+
+        double result = 0;
+
+        result = lambda / (s*miu);
+        print(result);
+
+        return result;
+
+
+       
 
     }
     public void generarL(double lambda, double miu)
@@ -80,7 +171,7 @@ public class MM1 : MonoBehaviour
 
         double result = 0;
 
-        result = (lambda ) / (miu - lambda);
+        result = (lambda) / (miu - lambda);
 
 
 
