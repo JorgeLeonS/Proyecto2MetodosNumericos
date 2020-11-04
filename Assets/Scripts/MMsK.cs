@@ -1,15 +1,15 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 //using System.Math;
-public class MMS : MonoBehaviour
+public class MMsK : MonoBehaviour
 {
-    // Start is called before the first frame update
 
     public InputField LambdaInput;
     public InputField MiuInput;
     public InputField SInput;
+    public InputField KInput;
     public Text L_Result;
     public Text LQ_Result;
     public Text T_Result;
@@ -37,6 +37,7 @@ public class MMS : MonoBehaviour
         double lambda = double.Parse(LambdaInput.text);
         double miu = double.Parse(MiuInput.text);
         double s = double.Parse(SInput.text);
+        double k = double.Parse(KInput.text);
 
         /*    if (miu < lambda)
             {
