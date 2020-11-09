@@ -10,15 +10,28 @@ public class MMS : MonoBehaviour
     public InputField LambdaInput;
     public InputField MiuInput;
     public InputField SInput;
+    public InputField costoCSInput;
+    public InputField costoCWInput;
+    
+
     public Text L_Result;
     public Text LQ_Result;
-    public Text T_Result;
-    public Text TQ_Result;
-    public Text TS_Result;
     public Text W_Result;
     public Text WQ_Result;
     public Text PB_Result;
+
+    public Text CostoService_Result;
+    public Text CostoEspera_Result;
+    public Text CostoTotal_Result;
+
+    public Button Generar_Button;
+    public Button CalcularCostos_Button;
+    
+
     public Text Error_Text;
+
+    public double s = 0;
+    public double l = 0;
 
     // public GameObject CanvasReference;
     // public GameObject Row;
@@ -36,56 +49,58 @@ public class MMS : MonoBehaviour
         //Recibir los input
         double lambda = double.Parse(LambdaInput.text);
         double miu = double.Parse(MiuInput.text);
-        double s = double.Parse(SInput.text);
+        s = double.Parse(SInput.text);
 
-        /*    if (miu < lambda)
-            {
-                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Pon los input bien";
+        if(lambda < miu*s){
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "";
+            double p0 = generarP0(lambda, miu, s);
 
-            }
-            else
-            {
-                float fac = factorial(0f);
-                print("factorial 0 " + fac);
+            print("P0 " + p0);
 
-                float fac1 = factorial(1f);
-                print("factorial 1 " + fac1);
+            double p = generarP(lambda, miu, s);
+            print("P " + p);
+            double lq = generarLQ(lambda, miu, p0, p, s);
 
-                double p0 = generarP0(lambda, miu, s);
+            l = generarL(lambda, miu ,lq);
+            double wq = generarWQ(lambda, lq);
+            double w = generarW(wq, miu);
 
-                print("P0 " + p0);          
-                double lq = generarLQ(lambda, miu);
-                LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.00");
-                generarL(lambda, miu);
-                generarWQ(lambda, miu);
-                generarW(lambda, miu);
-                double p =  generarP(lambda, miu, s);
-                PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.00");
+            PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.0000");
+            L_Result.GetComponent<UnityEngine.UI.Text>().text = l.ToString("0.0000");
+            LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.0000");
+            WQ_Result.GetComponent<UnityEngine.UI.Text>().text = wq.ToString("0.0000");
+            W_Result.GetComponent<UnityEngine.UI.Text>().text = w.ToString("0.0000");
 
+            costoCSInput.interactable = true;
+            costoCWInput.interactable = true;
+            CalcularCostos_Button.interactable = true;
 
-            }*/
+            LambdaInput.interactable = false;
+            MiuInput.interactable = false;
+            SInput.interactable = false;
+            Generar_Button.interactable = false;
+        }else
+        {
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Lambda no puede ser mayor a miu * s";
+        }
+    }
 
+    public void CalcularCostos(){
+        double costoL = double.Parse(costoCSInput.text);
+        double costoLq = double.Parse(costoCWInput.text);
 
-        double p0 = generarP0(lambda, miu, s);
-
-        print("P0 " + p0);
-      
-        double p = generarP(lambda, miu, s);
-        print("P " + p);
-        double lq = generarLQ(lambda, miu, p0, p, s);
+        double costoService = l*costoLq;
+        double costoEspera = s*costoL;
+        double costoTotal = costoService+costoEspera;
         
-        double l = generarL(lambda, miu ,lq);
-        double wq = generarWQ(lambda, lq);
-        double w = generarW(wq, miu);
-        
-        PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.0000");
-        L_Result.GetComponent<UnityEngine.UI.Text>().text = l.ToString("0.0000");
-        LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.0000");
-        WQ_Result.GetComponent<UnityEngine.UI.Text>().text = wq.ToString("0.0000");
-        W_Result.GetComponent<UnityEngine.UI.Text>().text = w.ToString("0.0000");
 
+        CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoService.ToString("0.0000");
+        CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
+        CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
 
-
+        costoCSInput.interactable = false;
+        costoCWInput.interactable = false;
+        CalcularCostos_Button.interactable = false;
     }
 
     public double generarLQ(double lambda, double miu, double p0, double p, double s)
