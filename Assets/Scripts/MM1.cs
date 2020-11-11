@@ -9,35 +9,35 @@ public class MM1 : MonoBehaviour
 
     public InputField LambdaInput;
     public InputField MiuInput;
+    public InputField costoCSInput;
+    public InputField costoCWInput;
+
     public Text L_Result;
     public Text LQ_Result;
-    public Text T_Result;
-    public Text TQ_Result;
-    public Text TS_Result;
     public Text W_Result;
     public Text WQ_Result;
     public Text PB_Result;
+
+    public Text CostoService_Result;
+    public Text CostoEspera_Result;
+    public Text CostoTotal_Result;
+
+    public Button Generar_Button;
+    public Button CalcularCostos_Button;
+
     public Text Error_Text;
 
-    // public GameObject CanvasReference;
-    // public GameObject Row;
-    // public GameObject TablePrefab;
-    // public GameObject Semilla;
-    // public GameObject Generador;
-    // public GameObject Numero_aleatorio;
-    // public GameObject Ri;
-    // public GameObject Content;
-    // public GameObject Errortext;
+    public double l = 0;
+
 
     public void generarNumeros(){
-        // resetTable();
         //Recibir los input
         double lambda = double.Parse(LambdaInput.text);
         double miu = double.Parse(MiuInput.text);
 
         if(miu < lambda)
         {
-            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Pon los input bien";
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Lambda debe ser menor a miu";
 
         }
         else
@@ -46,15 +46,21 @@ public class MM1 : MonoBehaviour
 
             print(p.ToString("0.00"));
             generarLQ(lambda, miu);
-            generarL(lambda, miu);
+            l = generarL(lambda, miu);
+            L_Result.GetComponent<UnityEngine.UI.Text>().text = l.ToString("0.00");
             generarWQ(lambda, miu);
             generarW(lambda, miu);
             PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.00");
 
         }
 
+        costoCSInput.interactable = true;
+        costoCWInput.interactable = true;
+        CalcularCostos_Button.interactable = true;
 
-
+        LambdaInput.interactable = false;
+        MiuInput.interactable = false;
+        Generar_Button.interactable = false;
       
 
     }
@@ -73,7 +79,7 @@ public class MM1 : MonoBehaviour
         LQ_Result.GetComponent<UnityEngine.UI.Text>().text = result.ToString("0.00") ;
 
     }
-    public void generarL(double lambda, double miu)
+    public double generarL(double lambda, double miu)
     {
         // resetTable();
         //Recibir los input
@@ -82,9 +88,9 @@ public class MM1 : MonoBehaviour
 
         result = (lambda ) / (miu - lambda);
 
+        return result;
 
-
-        L_Result.GetComponent<UnityEngine.UI.Text>().text = result.ToString("0.00");
+        // L_Result.GetComponent<UnityEngine.UI.Text>().text = result.ToString("0.00");
 
     }
     public void generarWQ(double lambda, double miu)
@@ -123,39 +129,42 @@ public class MM1 : MonoBehaviour
 
     }
 
-    // public void createNewRow(string semilla, string generador, string nAleatorio, float ri){
-    //     //Instanciar nueva fila
-    //     GameObject new_row = Instantiate(Row,new Vector3(0,0,0) , Quaternion.identity) as GameObject;
-    //     //Unirla a la tabla
-    //     new_row.transform.SetParent (Content.transform, false);
+    public void CalcularCostos(){
 
-    //     //Unir los objetos de texto con el codigo
-    //     Semilla = new_row.transform.Find("Semilla").gameObject;
-    //     Generador = new_row.transform.Find("Generador").gameObject;
-    //     Numero_aleatorio = new_row.transform.Find("Numero aleatorio").gameObject;
-    //     Ri = new_row.transform.Find("Ri").gameObject;
+        if(costoCSInput.text == ""){
+            double costoCW = double.Parse(costoCWInput.text);
+            double costoEspera = l*costoCW;
+            double costoTotal = costoEspera;
+            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
+            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
+            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
 
-    //     //Poner los valores correspondientes
-    //     Semilla.GetComponent<Text>().text =semilla;
-    //     Generador.GetComponent<Text>().text = generador;
-    //     Numero_aleatorio.GetComponent<Text>().text = nAleatorio;
-    //     Ri.GetComponent<Text>().text= ri.ToString("0.0000");
-    // }
-    // public void resetValues(){
-    //     semillaInput.text = "";
-    //     nInput.text="";
-    //     resetTable();
-    // }
+        }else if(costoCWInput.text == ""){
+            double costoCS = double.Parse(costoCSInput.text);
+            double costoServicio = costoCS;
+            double costoTotal = costoServicio;
+            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoServicio.ToString("0.0000");
+            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
+            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+        }else{
+            double costoCS = double.Parse(costoCSInput.text);
+            double costoCW = double.Parse(costoCWInput.text);
 
-    // public void resetTable(){
-    //     if (GameObject.Find("Table")){
-    //         Destroy(GameObject.Find("Table"));
-    //     }else{
-    //         Destroy(GameObject.Find("Table(Clone)"));
-    //     }   
-    //     GameObject new_Table = Instantiate(TablePrefab,new Vector3(-504.9432f,150.2171f,-266.1887f) , Quaternion.identity) as GameObject;
-    //     new_Table.transform.SetParent (CanvasReference.transform, false);
-    //     Content = new_Table.transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
-    // }
+
+
+            double costoService = costoCS;
+            double costoEspera = l*costoCW;
+            double costoTotal = costoService+costoEspera;
+            
+
+            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoService.ToString("0.0000");
+            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
+            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+        }
+
+        costoCSInput.interactable = false;
+        costoCWInput.interactable = false;
+        CalcularCostos_Button.interactable = false;
+    }
 
 }

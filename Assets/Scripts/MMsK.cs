@@ -10,15 +10,26 @@ public class MMsK : MonoBehaviour
     public InputField MiuInput;
     public InputField SInput;
     public InputField KInput;
+
+    public InputField costoCSInput;
+    public InputField costoCWInput;
+    public Text CostoService_Result;
+    public Text CostoEspera_Result;
+    public Text CostoTotal_Result;
+
     public Text L_Result;
     public Text LQ_Result;
-    public Text T_Result;
-    public Text TQ_Result;
-    public Text TS_Result;
     public Text W_Result;
     public Text WQ_Result;
     public Text PB_Result;
+
     public Text Error_Text;
+
+    public Button Generar_Button;
+    public Button CalcularCostos_Button;
+
+    public double s = 0;
+    public double l = 0;
 
     // public GameObject CanvasReference;
     // public GameObject Row;
@@ -36,48 +47,26 @@ public class MMsK : MonoBehaviour
         //Recibir los input
         double lambda = double.Parse(LambdaInput.text);
         double miu = double.Parse(MiuInput.text);
-        double s = double.Parse(SInput.text);
+        s = double.Parse(SInput.text);
         double k = double.Parse(KInput.text);
 
-        /*    if (miu < lambda)
-            {
-                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Pon los input bien";
-
-            }
-            else
-            {
-                float fac = factorial(0f);
-                print("factorial 0 " + fac);
-
-                float fac1 = factorial(1f);
-                print("factorial 1 " + fac1);
-
-                double p0 = generarP0(lambda, miu, s);
-
-                print("P0 " + p0);          
-                double lq = generarLQ(lambda, miu);
-                LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.00");
-                generarL(lambda, miu);
-                generarWQ(lambda, miu);
-                generarW(lambda, miu);
-                double p =  generarP(lambda, miu, s);
-                PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.00");
-
-
-            }*/
-
-
-        double p0 = generarP0(lambda, miu, s);
+        double p0 = generarP0(lambda, miu, s, k);
 
         print("P0 " + p0);
       
         double p = generarP(lambda, miu, s);
         print("P " + p);
-        double lq = generarLQ(lambda, miu, p0, p, s);
-        
-        double l = generarL(lambda, miu ,lq);
-        double wq = generarWQ(lambda, lq);
-        double w = generarW(wq, miu);
+        double lq = generarLQ(lambda, miu, p0, p, s, k);
+
+        double pk = generarPn(s, k, lambda, miu, p0);
+        print(pk);
+
+        double lambdae = lambda*(1-pk);
+        print(lambdae);
+
+        double wq = lq/lambdae;
+        double w = wq+(1/miu);
+        l = lambdae*w;
         
         PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.0000");
         L_Result.GetComponent<UnityEngine.UI.Text>().text = l.ToString("0.0000");
@@ -85,27 +74,56 @@ public class MMsK : MonoBehaviour
         WQ_Result.GetComponent<UnityEngine.UI.Text>().text = wq.ToString("0.0000");
         W_Result.GetComponent<UnityEngine.UI.Text>().text = w.ToString("0.0000");
 
+        costoCSInput.interactable = true;
+        costoCWInput.interactable = true;
+        CalcularCostos_Button.interactable = true;
 
+        LambdaInput.interactable = false;
+        MiuInput.interactable = false;
+        SInput.interactable = false;
+        KInput.interactable = false;
+        Generar_Button.interactable = false;
 
     }
 
-    public double generarLQ(double lambda, double miu, double p0, double p, double s)
+    public double generarPn(double s1, double k1, double lambda1, double miu1, double p0){
+
+        float n = (float)(k1);
+        double pn = 0;
+
+        float s = (float)(s1);
+        float lambda = (float)(lambda1);
+        float miu = (float)(miu1);
+
+        if(n<s){
+            pn = (Mathf.Pow((lambda/miu),n)/factorial(n))*p0;
+        }else{
+            pn = (Mathf.Pow((lambda/miu),n)/(factorial(s)*Mathf.Pow(s, n-s)))*p0;
+        }
+        return pn;
+    }
+
+    public double generarLQ(double lambda, double miu, double p0, double p, double s, double k)
     {
         // resetTable();
         //Recibir los input
 
-        double result = 0;
+        double resultLqMMS = 0;
+        double timesMMSK = 0;
 
-        result = ( p0 * Mathf.Pow((float)(lambda / miu), (float)s ) * p ) / ( factorial((float)s) * Mathf.Pow((float)(1 - p), 2))   ;
+        resultLqMMS = ( p0 * Mathf.Pow((float)(lambda / miu), (float)s ) * p ) / ( factorial((float)s) * Mathf.Pow((float)(1 - p), 2));
 
+        float p1 = (float)(p);
+        float k1 = (float)(k);
+        float s1 = (float)(s);
 
+        timesMMSK = (1-(Mathf.Pow(p1, k1-s1))-((k1-s1)*Mathf.Pow(p1, k1-s1))*(1-p1));
 
-       
-        return result;
+        return resultLqMMS*timesMMSK;
 
     }
 
-    public double generarP0(double l, double m, double s1)
+    public double generarP0(double l, double m, double s1, double k1)
     {
         // resetTable();
         //Recibir los input
@@ -117,10 +135,11 @@ public class MMsK : MonoBehaviour
         float lambda = (float)(l);
         float miu = (float)(m);
         float s = (float)(s1);
+        float k = (float)(k1);
         float a = 0f;
         float b = 0f;
         float c = 0f;
-        for (float n = 0; n < s; n++)
+        for (float n = 0; n <= s; n++)
         {
             
             a = a + Mathf.Pow(lambda / miu, n) / factorial(n);
@@ -130,12 +149,19 @@ public class MMsK : MonoBehaviour
         }
         b = b + (Mathf.Pow(lambda / miu, s) / factorial(s));
       //  print(" segunda sumatoria " + b);
-        c = 1 / (1 - (lambda / (s * miu)));
+
+        for(float n1=s+1;n1<=k;n1++){
+
+            c = c + Mathf.Pow((lambda) / (s*miu), (n1-s));
+
+        }
+    
+        // c = 1 / (1 - (lambda / (s * miu)));
        // print(" tercer termino " + c);
         sum = a + b * c;
         result = 1 / sum;
 
-       // print("P0"+ result);
+    //    print("P0"+ result);
 
 
 
@@ -175,85 +201,43 @@ public class MMsK : MonoBehaviour
        
 
     }
-    public double generarL(double lambda, double miu , double lq)
-    {
-        // resetTable();
-        //Recibir los input
 
-        double result = 0;
+    public void CalcularCostos(){
 
-        result = lq + (lambda) / miu ;
-        return result;
+        if(costoCSInput.text == ""){
+            double costoCW = double.Parse(costoCWInput.text);
+            double costoEspera = l*costoCW;
+            double costoTotal = costoEspera;
+            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
+            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
+            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+
+        }else if(costoCWInput.text == ""){
+            double costoCS = double.Parse(costoCSInput.text);
+            double costoServicio = s*costoCS;
+            double costoTotal = costoServicio;
+            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoServicio.ToString("0.0000");
+            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
+            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+        }else{
+            double costoCS = double.Parse(costoCSInput.text);
+            double costoCW = double.Parse(costoCWInput.text);
 
 
 
-    
+            double costoService = s*costoCS;
+            double costoEspera = l*costoCW;
+            double costoTotal = costoService+costoEspera;
+            
 
+            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoService.ToString("0.0000");
+            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
+            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+        }
+
+        costoCSInput.interactable = false;
+        costoCWInput.interactable = false;
+        CalcularCostos_Button.interactable = false;
     }
-    public double generarWQ(double lambda, double lq)
-    {
-       
-
-        double result = 0;
-
-        result = lq / lambda;
-
-
-
-        return result;
-
-
-
-    }
-    public double generarW(double wq, double miu)
-    {
-       
-
-        double result = 0;
-
-        result = wq + 1/ miu;
-
-
-
-        return result;
-
-
-
-    }
-
-    // public void createNewRow(string semilla, string generador, string nAleatorio, float ri){
-    //     //Instanciar nueva fila
-    //     GameObject new_row = Instantiate(Row,new Vector3(0,0,0) , Quaternion.identity) as GameObject;
-    //     //Unirla a la tabla
-    //     new_row.transform.SetParent (Content.transform, false);
-
-    //     //Unir los objetos de texto con el codigo
-    //     Semilla = new_row.transform.Find("Semilla").gameObject;
-    //     Generador = new_row.transform.Find("Generador").gameObject;
-    //     Numero_aleatorio = new_row.transform.Find("Numero aleatorio").gameObject;
-    //     Ri = new_row.transform.Find("Ri").gameObject;
-
-    //     //Poner los valores correspondientes
-    //     Semilla.GetComponent<Text>().text =semilla;
-    //     Generador.GetComponent<Text>().text = generador;
-    //     Numero_aleatorio.GetComponent<Text>().text = nAleatorio;
-    //     Ri.GetComponent<Text>().text= ri.ToString("0.0000");
-    // }
-    // public void resetValues(){
-    //     semillaInput.text = "";
-    //     nInput.text="";
-    //     resetTable();
-    // }
-
-    // public void resetTable(){
-    //     if (GameObject.Find("Table")){
-    //         Destroy(GameObject.Find("Table"));
-    //     }else{
-    //         Destroy(GameObject.Find("Table(Clone)"));
-    //     }   
-    //     GameObject new_Table = Instantiate(TablePrefab,new Vector3(-504.9432f,150.2171f,-266.1887f) , Quaternion.identity) as GameObject;
-    //     new_Table.transform.SetParent (CanvasReference.transform, false);
-    //     Content = new_Table.transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
-    // }
 
 }
