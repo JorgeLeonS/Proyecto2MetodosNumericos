@@ -50,39 +50,45 @@ public class MMsK : MonoBehaviour
         s = double.Parse(SInput.text);
         double k = double.Parse(KInput.text);
 
-        double p0 = generarP0(lambda, miu, s, k);
+        if(lambda < miu*s){
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "";
 
-        print("P0 " + p0);
-      
-        double p = generarP(lambda, miu, s);
-        print("P " + p);
-        double lq = generarLQ(lambda, miu, p0, p, s, k);
+            double p0 = generarP0(lambda, miu, s, k);
 
-        double pk = generarPn(s, k, lambda, miu, p0);
-        print(pk);
-
-        double lambdae = lambda*(1-pk);
-        print(lambdae);
-
-        double wq = lq/lambdae;
-        double w = wq+(1/miu);
-        l = lambdae*w;
+            print("P0 " + p0);
         
-        PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.0000");
-        L_Result.GetComponent<UnityEngine.UI.Text>().text = l.ToString("0.0000");
-        LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.0000");
-        WQ_Result.GetComponent<UnityEngine.UI.Text>().text = wq.ToString("0.0000");
-        W_Result.GetComponent<UnityEngine.UI.Text>().text = w.ToString("0.0000");
+            double p = generarP(lambda, miu, s);
+            print("P " + p);
+            double lq = generarLQ(lambda, miu, p0, p, s, k);
 
-        costoCSInput.interactable = true;
-        costoCWInput.interactable = true;
-        CalcularCostos_Button.interactable = true;
+            double pk = generarPn(s, k, lambda, miu, p0);
+            print(pk);
 
-        LambdaInput.interactable = false;
-        MiuInput.interactable = false;
-        SInput.interactable = false;
-        KInput.interactable = false;
-        Generar_Button.interactable = false;
+            double lambdae = lambda*(1-pk);
+            print(lambdae);
+
+            double wq = lq/lambdae;
+            double w = wq+(1/miu);
+            l = lambdae*w;
+            
+            PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.0000");
+            L_Result.GetComponent<UnityEngine.UI.Text>().text = l.ToString("0.0000");
+            LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.0000");
+            WQ_Result.GetComponent<UnityEngine.UI.Text>().text = wq.ToString("0.0000");
+            W_Result.GetComponent<UnityEngine.UI.Text>().text = w.ToString("0.0000");
+
+            costoCSInput.interactable = true;
+            costoCWInput.interactable = true;
+            CalcularCostos_Button.interactable = true;
+
+            LambdaInput.interactable = false;
+            MiuInput.interactable = false;
+            SInput.interactable = false;
+            KInput.interactable = false;
+            Generar_Button.interactable = false;
+        }else{
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Lambda no puede ser mayor a miu * s";
+        }
 
     }
 

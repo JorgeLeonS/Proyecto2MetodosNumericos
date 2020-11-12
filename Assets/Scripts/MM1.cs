@@ -42,6 +42,9 @@ public class MM1 : MonoBehaviour
         }
         else
         {
+
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "";
+
             double p = lambda / miu;
 
             print(p.ToString("0.00"));
@@ -52,16 +55,15 @@ public class MM1 : MonoBehaviour
             generarW(lambda, miu);
             PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.00");
 
+            costoCSInput.interactable = true;
+            costoCWInput.interactable = true;
+            CalcularCostos_Button.interactable = true;
+
+            LambdaInput.interactable = false;
+            MiuInput.interactable = false;
+            Generar_Button.interactable = false;
+
         }
-
-        costoCSInput.interactable = true;
-        costoCWInput.interactable = true;
-        CalcularCostos_Button.interactable = true;
-
-        LambdaInput.interactable = false;
-        MiuInput.interactable = false;
-        Generar_Button.interactable = false;
-      
 
     }
 

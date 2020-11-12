@@ -1121,7 +1121,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Costo de espera
+  m_Text: Costo de espera en el sistema
 --- !u!222 &470079239
 CanvasRenderer:
   m_ObjectHideFlags: 0

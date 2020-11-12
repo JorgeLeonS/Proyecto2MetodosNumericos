@@ -1128,7 +1128,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Costo de espera
+  m_Text: Costo de espera en el sistema
 --- !u!222 &284000259
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3788,9 +3788,6 @@ MonoBehaviour:
   CostoTotal_Result: {fileID: 317595795}
   L_Result: {fileID: 2101146620}
   LQ_Result: {fileID: 1798992206}
-  T_Result: {fileID: 0}
-  TQ_Result: {fileID: 0}
-  TS_Result: {fileID: 0}
   W_Result: {fileID: 528069984}
   WQ_Result: {fileID: 1745197510}
   PB_Result: {fileID: 1127803605}
