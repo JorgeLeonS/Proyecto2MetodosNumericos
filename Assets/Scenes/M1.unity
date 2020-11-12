@@ -4097,7 +4097,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Probabilidad que cualquier servidor este ocupado P
+  m_Text: "Tasa de utilizaci\xF3n P"
 --- !u!222 &2113207775
 CanvasRenderer:
   m_ObjectHideFlags: 0
