@@ -39,76 +39,104 @@ public class MMS : MonoBehaviour
         double miu = double.Parse(MiuInput.text);
         s = double.Parse(SInput.text);
 
-        if(lambda < miu*s){
-            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "";
-            double p0 = generarP0(lambda, miu, s);
+        if (lambda < 0 || miu < 0 )
+        {
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Input deben de ser positivos";
+        } else if (lambda < miu*s){
+        Error_Text.GetComponent<UnityEngine.UI.Text>().text = "";
+        double p0 = generarP0(lambda, miu, s);
 
-            print("P0 " + p0);
+        print("P0 " + p0);
 
-            double p = generarP(lambda, miu, s);
-            print("P " + p);
-            double lq = generarLQ(lambda, miu, p0, p, s);
+        double p = generarP(lambda, miu, s);
+        print("P " + p);
+        double lq = generarLQ(lambda, miu, p0, p, s);
 
-            l = generarL(lambda, miu ,lq);
-            double wq = generarWQ(lambda, lq);
-            double w = generarW(wq, miu);
+        l = generarL(lambda, miu ,lq);
+        double wq = generarWQ(lambda, lq);
+        double w = generarW(wq, miu);
 
-            PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.0000");
-            L_Result.GetComponent<UnityEngine.UI.Text>().text = l.ToString("0.0000");
-            LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.0000");
-            WQ_Result.GetComponent<UnityEngine.UI.Text>().text = wq.ToString("0.0000");
-            W_Result.GetComponent<UnityEngine.UI.Text>().text = w.ToString("0.0000");
+        PB_Result.GetComponent<UnityEngine.UI.Text>().text = p.ToString("0.0000");
+        L_Result.GetComponent<UnityEngine.UI.Text>().text = l.ToString("0.0000");
+        LQ_Result.GetComponent<UnityEngine.UI.Text>().text = lq.ToString("0.0000");
+        WQ_Result.GetComponent<UnityEngine.UI.Text>().text = wq.ToString("0.0000");
+        W_Result.GetComponent<UnityEngine.UI.Text>().text = w.ToString("0.0000");
 
-            costoCSInput.interactable = true;
-            costoCWInput.interactable = true;
-            CalcularCostos_Button.interactable = true;
+        costoCSInput.interactable = true;
+        costoCWInput.interactable = true;
+        CalcularCostos_Button.interactable = true;
 
-            LambdaInput.interactable = false;
-            MiuInput.interactable = false;
-            SInput.interactable = false;
-            Generar_Button.interactable = false;
-        }else
+        LambdaInput.interactable = false;
+        MiuInput.interactable = false;
+        SInput.interactable = false;
+        Generar_Button.interactable = false;
+    }else
         {
             Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Lambda no puede ser mayor a miu * s";
         }
     }
 
     public void CalcularCostos(){
-
-        if(costoCSInput.text == ""){
+        bool disableInput = false;
+        if (costoCSInput.text == "" && costoCWInput.text == ""){
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Costos vacios";
+        } else if(costoCSInput.text == ""){
             double costoCW = double.Parse(costoCWInput.text);
-            double costoEspera = l*costoCW;
-            double costoTotal = costoEspera;
-            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
-            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
-            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+            if (costoCW < 0 )
+            {
+                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "El costo de espera debe ser positivo";
+            }else{
+                double costoEspera = l*costoCW;
+                double costoTotal = costoEspera;
+                CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
+                CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
+                CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+                disableInput=true;
+            }
 
         }else if(costoCWInput.text == ""){
             double costoCS = double.Parse(costoCSInput.text);
-            double costoServicio = s*costoCS;
-            double costoTotal = costoServicio;
-            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoServicio.ToString("0.0000");
-            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
-            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+            if (costoCS < 0 )
+            {
+                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "El costo de servicio debe ser positivo";
+            }else{
+                double costoServicio = costoCS;
+                double costoTotal = costoServicio;
+                CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoServicio.ToString("0.0000");
+                CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
+                CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+                disableInput=true;
+            }
         }else{
+            
+
             double costoCS = double.Parse(costoCSInput.text);
             double costoCW = double.Parse(costoCWInput.text);
 
-
-
-            double costoService = s*costoCS;
+            if (costoCS < 0 || costoCW < 0 )
+            {
+                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Los costos deben de ser positivos";
+            }else{
+                
+            double costoService = costoCS;
             double costoEspera = l*costoCW;
             double costoTotal = costoService+costoEspera;
             
 
             CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoService.ToString("0.0000");
             CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
-            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");                
+            disableInput=true;
+            }
+
         }
 
-        costoCSInput.interactable = false;
-        costoCWInput.interactable = false;
-        CalcularCostos_Button.interactable = false;
+        if(disableInput){
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "";
+            costoCSInput.interactable = false;
+            costoCWInput.interactable = false;
+            CalcularCostos_Button.interactable = false;
+        }
     }
 
     public double generarLQ(double lambda, double miu, double p0, double p, double s)
@@ -242,40 +270,5 @@ public class MMS : MonoBehaviour
 
 
     }
-
-    // public void createNewRow(string semilla, string generador, string nAleatorio, float ri){
-    //     //Instanciar nueva fila
-    //     GameObject new_row = Instantiate(Row,new Vector3(0,0,0) , Quaternion.identity) as GameObject;
-    //     //Unirla a la tabla
-    //     new_row.transform.SetParent (Content.transform, false);
-
-    //     //Unir los objetos de texto con el codigo
-    //     Semilla = new_row.transform.Find("Semilla").gameObject;
-    //     Generador = new_row.transform.Find("Generador").gameObject;
-    //     Numero_aleatorio = new_row.transform.Find("Numero aleatorio").gameObject;
-    //     Ri = new_row.transform.Find("Ri").gameObject;
-
-    //     //Poner los valores correspondientes
-    //     Semilla.GetComponent<Text>().text =semilla;
-    //     Generador.GetComponent<Text>().text = generador;
-    //     Numero_aleatorio.GetComponent<Text>().text = nAleatorio;
-    //     Ri.GetComponent<Text>().text= ri.ToString("0.0000");
-    // }
-    // public void resetValues(){
-    //     semillaInput.text = "";
-    //     nInput.text="";
-    //     resetTable();
-    // }
-
-    // public void resetTable(){
-    //     if (GameObject.Find("Table")){
-    //         Destroy(GameObject.Find("Table"));
-    //     }else{
-    //         Destroy(GameObject.Find("Table(Clone)"));
-    //     }   
-    //     GameObject new_Table = Instantiate(TablePrefab,new Vector3(-504.9432f,150.2171f,-266.1887f) , Quaternion.identity) as GameObject;
-    //     new_Table.transform.SetParent (CanvasReference.transform, false);
-    //     Content = new_Table.transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
-    // }
 
 }

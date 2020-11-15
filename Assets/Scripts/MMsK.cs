@@ -31,15 +31,6 @@ public class MMsK : MonoBehaviour
     public double s = 0;
     public double l = 0;
 
-    // public GameObject CanvasReference;
-    // public GameObject Row;
-    // public GameObject TablePrefab;
-    // public GameObject Semilla;
-    // public GameObject Generador;
-    // public GameObject Numero_aleatorio;
-    // public GameObject Ri;
-    // public GameObject Content;
-    // public GameObject Errortext;
 
     public void generarNumeros()
     {
@@ -50,7 +41,12 @@ public class MMsK : MonoBehaviour
         s = double.Parse(SInput.text);
         double k = double.Parse(KInput.text);
 
-        if(lambda < miu*s){
+        if (lambda < 0 || miu < 0)
+        {
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Input deben de ser positivos";
+        }
+        else if (lambda < miu * s)
+        {
             Error_Text.GetComponent<UnityEngine.UI.Text>().text = "";
 
             double p0 = generarP0(lambda, miu, s, k);
@@ -209,41 +205,66 @@ public class MMsK : MonoBehaviour
     }
 
     public void CalcularCostos(){
-
-        if(costoCSInput.text == ""){
+        bool disableInput = false;
+        if (costoCSInput.text == "" && costoCWInput.text == ""){
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Costos vacios";
+        } else if(costoCSInput.text == ""){
             double costoCW = double.Parse(costoCWInput.text);
-            double costoEspera = l*costoCW;
-            double costoTotal = costoEspera;
-            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
-            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
-            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+            if (costoCW < 0 )
+            {
+                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "El costo de espera debe ser positivo";
+            }else{
+                double costoEspera = l*costoCW;
+                double costoTotal = costoEspera;
+                CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
+                CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
+                CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+                disableInput=true;
+            }
 
         }else if(costoCWInput.text == ""){
             double costoCS = double.Parse(costoCSInput.text);
-            double costoServicio = s*costoCS;
-            double costoTotal = costoServicio;
-            CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoServicio.ToString("0.0000");
-            CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
-            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+            if (costoCS < 0 )
+            {
+                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "El costo de servicio debe ser positivo";
+            }else{
+                double costoServicio = costoCS;
+                double costoTotal = costoServicio;
+                CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoServicio.ToString("0.0000");
+                CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
+                CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+                disableInput=true;
+            }
         }else{
+            
+
             double costoCS = double.Parse(costoCSInput.text);
             double costoCW = double.Parse(costoCWInput.text);
 
-
-
-            double costoService = s*costoCS;
+            if (costoCS < 0 || costoCW < 0 )
+            {
+                Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Los costos deben de ser positivos";
+            }else{
+                
+            double costoService = costoCS;
             double costoEspera = l*costoCW;
             double costoTotal = costoService+costoEspera;
             
 
             CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoService.ToString("0.0000");
             CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
-            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
+            CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");                
+            disableInput=true;
+            }
+
         }
 
-        costoCSInput.interactable = false;
-        costoCWInput.interactable = false;
-        CalcularCostos_Button.interactable = false;
+        if(disableInput){
+            Error_Text.GetComponent<UnityEngine.UI.Text>().text = "";
+            costoCSInput.interactable = false;
+            costoCWInput.interactable = false;
+            CalcularCostos_Button.interactable = false;
+        }
     }
 
 }
