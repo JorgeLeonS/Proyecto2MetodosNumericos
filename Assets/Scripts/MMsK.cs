@@ -229,7 +229,7 @@ public class MMsK : MonoBehaviour
                 Error_Text.GetComponent<UnityEngine.UI.Text>().text = "El costo de servicio debe ser positivo";
             }else{
                 double costoServicio = costoCS;
-                double costoTotal = costoServicio;
+                double costoTotal = s*costoServicio;
                 CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoServicio.ToString("0.0000");
                 CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
                 CostoTotal_Result.GetComponent<UnityEngine.UI.Text>().text = costoTotal.ToString("0.0000");
@@ -246,7 +246,7 @@ public class MMsK : MonoBehaviour
                 Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Los costos deben de ser positivos";
             }else{
                 
-            double costoService = costoCS;
+            double costoService = s*costoCS;
             double costoEspera = l*costoCW;
             double costoTotal = costoService+costoEspera;
             

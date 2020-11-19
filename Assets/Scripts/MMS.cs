@@ -100,7 +100,7 @@ public class MMS : MonoBehaviour
             {
                 Error_Text.GetComponent<UnityEngine.UI.Text>().text = "El costo de servicio debe ser positivo";
             }else{
-                double costoServicio = costoCS;
+                double costoServicio = s*costoCS;
                 double costoTotal = costoServicio;
                 CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = costoServicio.ToString("0.0000");
                 CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
@@ -118,7 +118,7 @@ public class MMS : MonoBehaviour
                 Error_Text.GetComponent<UnityEngine.UI.Text>().text = "Los costos deben de ser positivos";
             }else{
                 
-            double costoService = costoCS;
+            double costoService = s*costoCS;
             double costoEspera = l*costoCW;
             double costoTotal = costoService+costoEspera;
             
