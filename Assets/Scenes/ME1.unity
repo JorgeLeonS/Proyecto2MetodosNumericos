@@ -531,7 +531,7 @@ GameObject:
   - component: {fileID: 312558267}
   - component: {fileID: 312558266}
   m_Layer: 5
-  m_Name: InputDeviation
+  m_Name: InputK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -750,7 +750,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: MG1
+          m_StringArgument: ME1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &374543712
@@ -1408,7 +1408,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Desviacion estandar
+  m_Text: K
 --- !u!222 &748077774
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2201,12 +2201,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1021866026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2165413512e1d4241b60b8efe40632f7, type: 3}
+  m_Script: {fileID: 11500000, guid: fe754374c8a0a484caaeaf735462e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LambdaInput: {fileID: 817742892}
   MiuInput: {fileID: 1533756791}
-  DesviacionInput: {fileID: 312558266}
+  KInput: {fileID: 312558266}
   costoCSInput: {fileID: 2093558960}
   costoCWInput: {fileID: 1178279812}
   CostoService_Result: {fileID: 200542717}
@@ -2948,7 +2948,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1021866027}
-        m_TargetAssemblyTypeName: MG1, Assembly-CSharp
+        m_TargetAssemblyTypeName: ME1, Assembly-CSharp
         m_MethodName: CalcularCostos
         m_Mode: 1
         m_Arguments:
@@ -4279,7 +4279,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1021866027}
-        m_TargetAssemblyTypeName: MG1, Assembly-CSharp
+        m_TargetAssemblyTypeName: ME1, Assembly-CSharp
         m_MethodName: generarNumeros
         m_Mode: 1
         m_Arguments:
