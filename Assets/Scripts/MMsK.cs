@@ -30,6 +30,7 @@ public class MMsK : MonoBehaviour
 
     public double s = 0;
     public double l = 0;
+    public double lq = 0;
 
 
     public void generarNumeros()
@@ -55,7 +56,7 @@ public class MMsK : MonoBehaviour
         
             double p = generarP(lambda, miu, s);
             print("P " + p);
-            double lq = generarLQ(lambda, miu, p0, p, s, k);
+            lq = generarLQ(lambda, miu, p0, p, s, k);
 
             double pk = generarPn(s, k, lambda, miu, p0);
             print(pk);
@@ -214,7 +215,7 @@ public class MMsK : MonoBehaviour
             {
                 Error_Text.GetComponent<UnityEngine.UI.Text>().text = "El costo de espera debe ser positivo";
             }else{
-                double costoEspera = l*costoCW;
+                double costoEspera = lq*costoCW;
                 double costoTotal = costoEspera;
                 CostoService_Result.GetComponent<UnityEngine.UI.Text>().text = "0";
                 CostoEspera_Result.GetComponent<UnityEngine.UI.Text>().text = costoEspera.ToString("0.0000");
@@ -247,7 +248,7 @@ public class MMsK : MonoBehaviour
             }else{
                 
             double costoService = s*costoCS;
-            double costoEspera = l*costoCW;
+            double costoEspera = lq*costoCW;
             double costoTotal = costoService+costoEspera;
             
 

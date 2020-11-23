@@ -1131,7 +1131,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Costo de espera en el sistema  \t\t\t\t\t\t\t\t\t\t\t\t\t\tCW="
+  m_Text: "Costo de espera en la fila\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCW="
 --- !u!222 &284000259
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4032,6 +4032,7 @@ MonoBehaviour:
   CalcularCostos_Button: {fileID: 1432043244}
   s: 0
   l: 0
+  lq: 0
 --- !u!224 &1777038450
 RectTransform:
   m_ObjectHideFlags: 0
